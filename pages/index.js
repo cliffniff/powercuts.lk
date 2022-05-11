@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import Head from "next/head";
 
 import fs from "fs/promises";
@@ -9,6 +8,8 @@ import Group from "../components/Group";
 import Navbar from "../components/Navbar";
 
 import styles from "../styles/Home.module.css";
+
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 
 export const getServerSideProps = async () => {
     try {
@@ -69,24 +70,6 @@ export const getServerSideProps = async () => {
 
 export default function Home({ schedule, geoAreas }) {
     const [highlighted, setHighlighted] = useState("");
-
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                async (pos) => {
-                    const { latitude, longitude } = pos.coords;
-                    const res = await fetch(
-                        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-                    );
-
-                    console.log(res.json());
-                },
-                (err) => {
-                    console.log(err);
-                }
-            );
-        }
-    }, []);
 
     return (
         <div>
