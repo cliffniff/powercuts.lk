@@ -1,0 +1,69 @@
+@keyframes highlight {
+    0% {
+        background-color: #fff;
+    }
+    50% {
+        background-color: rgb(222, 184, 135);
+    }
+    100% {
+        background-color: #fff;
+    }
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.group-highlighted {
+    animation: highlight 0.5s ease-in-out;
+}
+
+.group-title {
+    margin: 0px;
+}
+
+.group-areas {
+    font-size: smaller;
+    font-style: italic;
+    height: 100px;
+    overflow: auto;
+}
+
+.group-timings {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px;
+}
+
+.group-timing {
+}
+
+.group-timing-date {
+    margin: 10px 0px 0px 0px;
+}
+
+.group-timing-list {
+    margin: 5px 0px;
+    padding: 0px 0px 0px 30px;
+}
+
+.group-timing-list li {
+    margin: 0px;
+}
+
+.group-active {
+    display: inline-block;
+    background-color: rgb(4, 155, 62);
+    font-size: 0.8em;
+    line-height: 0.8em;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 99px;
+    margin: 8px auto 8px 0px;
+}
