@@ -1,3 +1,13 @@
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .container {
     background-color: rgb(220, 220, 220);
 }
@@ -5,4 +15,33 @@
 .groups {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.suspense {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.suspense-error {
+    text-align: center;
+}
+
+.suspense-error h5 {
+    margin: 0px;
+}
+
+.suspense-error i {
+    font-size: 0.75em;
+}
+
+.suspense-loading {
+    text-align: center;
+}
+
+.suspense-loading-spinner {
+    animation: spin 1.2s linear infinite;
 }
