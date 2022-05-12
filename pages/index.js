@@ -19,26 +19,7 @@ export default function Home() {
     useEffect(() => {
         (async () => {
             try {
-                const pageRes = await fetch("https://cebcare.ceb.lk/Incognito/DemandMgmtSchedule", {
-                    headers: {
-                        accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-                        "accept-language": "en-US,en;q=0.9",
-                        "cache-control": "max-age=0",
-                        "sec-ch-ua":
-                            '" Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"',
-                        "sec-ch-ua-mobile": "?0",
-                        "sec-ch-ua-platform": '"Windows"',
-                        "sec-fetch-dest": "document",
-                        "sec-fetch-mode": "navigate",
-                        "sec-fetch-site": "none",
-                        "sec-fetch-user": "?1",
-                        "upgrade-insecure-requests": "1",
-                        cookie: ".AspNetCore.Antiforgery.ThOcTlhnrMo=CfDJ8DRug-ybtbxAjw2fB8wdOCMYADRkPoS0OP2J41DsQ8yKYk7dGhQYARk-MdPz_dF0kIjLp5v6gpNVGwWCZgHy1j-bLZBvIDm1-zAgJvbj0bd4nC9pj-_DydARTKDDEg8U9S6VUU7oQhRW9HGmqVmsJN8",
-                    },
-                    referrerPolicy: "strict-origin-when-cross-origin",
-                    body: null,
-                    method: "GET",
-                });
+                const pageRes = await fetch("https://cebcare.ceb.lk/Incognito/DemandMgmtSchedule");
                 const pageContent = await pageRes.text();
 
                 const domParser = new DOMParser();
