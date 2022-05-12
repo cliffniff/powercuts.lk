@@ -9,8 +9,6 @@ import Navbar from "../components/Navbar";
 
 import styles from "../styles/Home.module.css";
 
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-
 export const getServerSideProps = async () => {
     try {
         const pageRes = await fetch("https://cebcare.ceb.lk/Incognito/DemandMgmtSchedule");
