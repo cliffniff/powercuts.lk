@@ -19,8 +19,73 @@ export default function Home() {
     useEffect(() => {
         (async () => {
             try {
-                const scheduleRes = await fetch("/api/getSchedule");
-                const schedule = await scheduleRes.json();
+                const pageRes = await fetch("https://cebcare.ceb.lk/Incognito/DemandMgmtSchedule", {
+                    headers: {
+                        accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                        "accept-language": "en-US,en;q=0.9",
+                        "cache-control": "max-age=0",
+                        "sec-ch-ua":
+                            '" Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"',
+                        "sec-ch-ua-mobile": "?0",
+                        "sec-ch-ua-platform": '"Windows"',
+                        "sec-fetch-dest": "document",
+                        "sec-fetch-mode": "navigate",
+                        "sec-fetch-site": "none",
+                        "sec-fetch-user": "?1",
+                        "upgrade-insecure-requests": "1",
+                        cookie: ".AspNetCore.Antiforgery.ThOcTlhnrMo=CfDJ8DRug-ybtbxAjw2fB8wdOCMYADRkPoS0OP2J41DsQ8yKYk7dGhQYARk-MdPz_dF0kIjLp5v6gpNVGwWCZgHy1j-bLZBvIDm1-zAgJvbj0bd4nC9pj-_DydARTKDDEg8U9S6VUU7oQhRW9HGmqVmsJN8",
+                    },
+                    referrerPolicy: "strict-origin-when-cross-origin",
+                    body: null,
+                    method: "GET",
+                });
+                const pageContent = await pageRes.text();
+
+                const domParser = new DOMParser();
+                const parsedDoc = domParser.parseFromString(pageContent, "text/html");
+
+                const reqToken = parsedDoc
+                    .getElementsByName("__RequestVerificationToken")[0]
+                    .getAttribute("value");
+
+                const reqCookie = pageRes.headers.get("set-cookie").split(";")[0];
+
+                const dateRef = new Date();
+                const startTime = `${dateRef.getFullYear()}-${
+                    dateRef.getMonth() + 1
+                }-${dateRef.getDate()}`;
+                dateRef.setDate(dateRef.getDate() + 1);
+                const endTime = `${dateRef.getFullYear()}-${
+                    dateRef.getMonth() + 1
+                }-${dateRef.getDate()}`;
+
+                const scheduleRes = await fetch(
+                    "https://cebcare.ceb.lk/Incognito/GetLoadSheddingEvents",
+                    {
+                        headers: {
+                            requestverificationtoken: reqToken,
+                            cookie: reqCookie,
+                        },
+                        cache: "no-cache",
+                        body: `StartTime=${startTime}&EndTime=${endTime}`,
+                        method: "POST",
+                    }
+                );
+
+                const scheduleData = await scheduleRes.json();
+                const schedule = {};
+
+                scheduleData.forEach((item) => {
+                    const gid = item.loadShedGroupId;
+                    const stime = item.startTime.replace("T", " ");
+                    const etime = item.endTime.replace("T", " ");
+
+                    if (schedule[gid] === undefined) {
+                        schedule[gid] = [{ startTime: stime, endTime: etime }];
+                    } else {
+                        schedule[gid].push({ startTime: stime, endTime: etime });
+                    }
+                });
 
                 const geoRes = await fetch("/geoAreas.json");
                 const geoAreas = await geoRes.json();
