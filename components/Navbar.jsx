@@ -13,12 +13,11 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
     const navbarRef = useRef();
 
     const gotoGroup = (gid) => {
-        console.log("going to group");
-        setTimeout(() => {
-            const navbarHeight = navbarRef.current.clientHeight + 10;
-            setHighlighted(gid);
-            window.scrollBy({ left: 0, top: -1 * navbarHeight, behavior: "smooth" });
-        }, 10);
+        document.getElementById(`group${gid}`).scrollIntoView();
+
+        const navbarHeight = navbarRef.current.clientHeight + 10;
+        setHighlighted(gid);
+        window.scrollBy({ left: 0, top: -1 * navbarHeight, behavior: "smooth" });
     };
 
     useEffect(() => {
@@ -59,7 +58,6 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
                             data-letter={letter}
                             onClick={(e) => {
                                 e.preventDefault();
-                                window.location.hash = `#group${e.currentTarget.dataset.letter}`;
                                 gotoGroup(e.currentTarget.dataset.letter);
                             }}>
                             {letter}
@@ -73,6 +71,7 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
                 placeholder="Search your location..."
                 value={query}
                 onChange={(e) => {
+                    setSearchFocused(true);
                     setQuery(e.target.value.trim());
                 }}
                 onFocus={() => {
@@ -82,36 +81,32 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
                     setSearchFocused(false);
                 }}
             />
-            <div
-                className={query === "" ? styles["suggestions"] : searchFocused || suggestionsFocused ? styles["suggestions-visible"] : styles["suggestions"]}
-                onMouseEnter={() => {
-                    setSuggestionsFocused(true);
-                }}
-                onMouseLeave={() => {
-                    setSuggestionsFocused(false);
-                }}>
+            <div className={query === "" ? styles["suggestions"] : searchFocused || suggestionsFocused ? styles["suggestions-visible"] : styles["suggestions"]}>
                 {suggestions.length > 0 ? (
                     suggestions.map((s) => {
                         return (
-                            <a
+                            <span
                                 className={styles["suggestion-link"]}
                                 key={s}
                                 data-letter={areaMap[s]}
+                                onMouseEnter={() => {
+                                    setSuggestionsFocused(true);
+                                }}
+                                onMouseLeave={() => {
+                                    setSuggestionsFocused(false);
+                                }}
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    window.location.hash = `#group${e.currentTarget.dataset.letter}`;
-                                    setSuggestionsFocused(false);
+                                    setSearchFocused(false);
                                     gotoGroup(e.currentTarget.dataset.letter);
                                 }}
                                 onTouchEnd={(e) => {
                                     e.preventDefault();
-                                    window.location.hash = `#group${e.currentTarget.dataset.letter}`;
-                                    setSuggestionsFocused(false);
+                                    setSearchFocused(false);
                                     gotoGroup(e.currentTarget.dataset.letter);
-                                }}
-                                href={`#`}>
+                                }}>
                                 {s}
-                            </a>
+                            </span>
                         );
                     })
                 ) : (

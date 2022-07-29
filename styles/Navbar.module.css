@@ -54,6 +54,7 @@
 }
 
 .suggestion-link {
+    cursor: pointer;
     color: #000;
 }
 
