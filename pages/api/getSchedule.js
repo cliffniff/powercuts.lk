@@ -1,6 +1,8 @@
 import DOMParser from "dom-parser";
 
 export default async function handler(req, res) {
+    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
     try {
         const pageRes = await fetch("https://cebcare.ceb.lk/Incognito/DemandMgmtSchedule");
         const pageContent = await pageRes.text();
@@ -8,9 +10,7 @@ export default async function handler(req, res) {
         const domParser = new DOMParser();
         const parsedDoc = domParser.parseFromString(pageContent, "text/html");
 
-        const reqToken = parsedDoc
-            .getElementsByName("__RequestVerificationToken")[0]
-            .getAttribute("value");
+        const reqToken = parsedDoc.getElementsByName("__RequestVerificationToken")[0].getAttribute("value");
 
         const reqCookie = pageRes.headers.get("set-cookie").split(";")[0];
 
