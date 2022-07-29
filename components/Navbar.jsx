@@ -2,34 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styles from "../styles/Navbar.module.css";
 
 const Navbar = ({ geoAreas, setHighlighted }) => {
-    const letters = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-    ];
+    const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
     const [query, setQuery] = useState("");
     const [areaMap, setAreaMap] = useState({});
@@ -40,6 +13,7 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
     const navbarRef = useRef();
 
     const gotoGroup = (gid) => {
+        console.log("going to group");
         setTimeout(() => {
             const navbarHeight = navbarRef.current.clientHeight + 10;
             setHighlighted(gid);
@@ -81,9 +55,12 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
                         <a
                             key={letter}
                             className={styles.navlink}
-                            href={`#group${letter}`}
-                            onClick={() => {
-                                gotoGroup(letter);
+                            href={`#`}
+                            data-letter={letter}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.location.hash = `#group${e.currentTarget.dataset.letter}`;
+                                gotoGroup(e.currentTarget.dataset.letter);
                             }}>
                             {letter}
                         </a>
@@ -106,13 +83,7 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
                 }}
             />
             <div
-                className={
-                    query === ""
-                        ? styles["suggestions"]
-                        : searchFocused || suggestionsFocused
-                        ? styles["suggestions-visible"]
-                        : styles["suggestions"]
-                }
+                className={query === "" ? styles["suggestions"] : searchFocused || suggestionsFocused ? styles["suggestions-visible"] : styles["suggestions"]}
                 onMouseEnter={() => {
                     setSuggestionsFocused(true);
                 }}
@@ -125,11 +96,20 @@ const Navbar = ({ geoAreas, setHighlighted }) => {
                             <a
                                 className={styles["suggestion-link"]}
                                 key={s}
-                                onClick={() => {
+                                data-letter={areaMap[s]}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    window.location.hash = `#group${e.currentTarget.dataset.letter}`;
                                     setSuggestionsFocused(false);
-                                    gotoGroup(areaMap[s]);
+                                    gotoGroup(e.currentTarget.dataset.letter);
                                 }}
-                                href={`#group${areaMap[s]}`}>
+                                onTouchEnd={(e) => {
+                                    e.preventDefault();
+                                    window.location.hash = `#group${e.currentTarget.dataset.letter}`;
+                                    setSuggestionsFocused(false);
+                                    gotoGroup(e.currentTarget.dataset.letter);
+                                }}
+                                href={`#`}>
                                 {s}
                             </a>
                         );
