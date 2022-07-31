@@ -29,31 +29,29 @@ const Group = ({ gid, areas, timings, highlighted }) => {
     }, [timings]);
 
     return (
-        <div
-            id={`group${gid}`}
-            className={
-                highlighted === gid
-                    ? styles.group + " " + styles["group-highlighted"]
-                    : styles.group
-            }>
-            <h1 className={styles["group-title"]}>{gid}</h1>
+        <div id={`group${gid}`} className={highlighted === gid ? styles.group + " " + styles["group-highlighted"] : styles.group}>
+            <h1 className={styles["group-title"]}>
+                <small>GROUP</small> {gid}
+            </h1>
             {active && <span className={styles["group-active"]}>Active</span>}
             <span className={styles["group-areas"]}>{areas.join(", ")}</span>
             <div className={styles["group-timings"]}>
                 {orgedTimings &&
-                    Object.entries(orgedTimings).map(([date, timings], index) => {
-                        if (date === new Date().toDateString()) {
+                    Object.entries(orgedTimings)
+                        .sort(([firstDate], [secondDate]) => {
+                            if (new Date(firstDate).getTime() > new Date(secondDate).getTime()) {
+                                return -1;
+                            }
+                            return 1;
+                        })
+                        .map(([date, timings], index) => {
                             return (
                                 <div key={index} className={styles["group-timing"]}>
                                     <h5 className={styles["group-timing-date"]}>{date}</h5>
                                     <ul className={styles["group-timing-list"]}>
                                         {timings.map((timing, index) => {
-                                            const startTime = new Date(
-                                                timing.startTime
-                                            ).toLocaleTimeString();
-                                            const endTime = new Date(
-                                                timing.endTime
-                                            ).toLocaleTimeString();
+                                            const startTime = new Date(timing.startTime).toLocaleTimeString();
+                                            const endTime = new Date(timing.endTime).toLocaleTimeString();
 
                                             return (
                                                 <li key={index}>
@@ -64,10 +62,7 @@ const Group = ({ gid, areas, timings, highlighted }) => {
                                     </ul>
                                 </div>
                             );
-                        } else {
-                            return;
-                        }
-                    })}
+                        })}
             </div>
         </div>
     );

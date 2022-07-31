@@ -15,12 +15,13 @@ export default async function handler(req, res) {
         const reqCookie = pageRes.headers.get("set-cookie").split(";")[0];
 
         const dateRef = new Date();
-        const startTime = `${dateRef.getFullYear()}-${dateRef.getMonth() + 1}-${dateRef.getDate()}`;
+        const startTime = `${dateRef.getFullYear()}-${("0" + (dateRef.getMonth() + 1)).slice(-2)}-${("0" + dateRef.getDate()).slice(-2)}`;
         dateRef.setDate(dateRef.getDate() + 1);
-        const endTime = `${dateRef.getFullYear()}-${dateRef.getMonth() + 1}-${dateRef.getDate()}`;
+        const endTime = `${dateRef.getFullYear()}-${("0" + (dateRef.getMonth() + 1)).slice(-2)}-${("0" + dateRef.getDate()).slice(-2)}`;
 
         const scheduleRes = await fetch("https://cebcare.ceb.lk/Incognito/GetLoadSheddingEvents", {
             headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
                 requestverificationtoken: reqToken,
                 cookie: reqCookie,
             },
